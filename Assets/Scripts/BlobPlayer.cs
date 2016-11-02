@@ -3,10 +3,10 @@ using System.Collections;
 
 public class BlobPlayer : MonoBehaviour {
 
-	public float speed = 6.0f;
-	public float gravity = -9.8f;
-	public float vertSpeed = 0;
-	public float jumpSpeed = 100f;
+	private float speed = 6.0f;
+    private float gravity = -1.5f;
+    private float vertSpeed = 0;
+    private float jumpSpeed = 20f;
 
 	private CharacterController charController;
 

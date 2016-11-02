@@ -5,10 +5,6 @@ public class CameraMove : MonoBehaviour {
 	//
 	//    private float speed = 75.0f;
 	//
-	//    // Use this for initialization
-	//    void Start () {
-	//    
-	//    }
 
 	public enum RotationAxes
 	{
@@ -30,6 +26,10 @@ public class CameraMove : MonoBehaviour {
 	// own, since localEulerAngles must be 0-360.
 	// Our variable is kept in range -45 to 45.
 	private float rotationX = 0;
+
+    void Start() {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
 	// Update is called once per frame
 	void Update () {
