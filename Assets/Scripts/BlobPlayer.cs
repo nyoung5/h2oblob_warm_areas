@@ -7,7 +7,7 @@ public class BlobPlayer : MonoBehaviour {
 
     private float speed = 6.0f;
     private float gravity = -9.8f;
-    private float jumpSpeed = 10f;
+    private float jumpSpeed = 5f;
     private float friction = .5f;
 
     private float xSpeed = 0;
@@ -43,8 +43,6 @@ public class BlobPlayer : MonoBehaviour {
     }
 
 	void Update() {
-        //float deltaX = Input.GetAxis("Horizontal") * speed;
-        //float deltaZ = Input.GetAxis("Vertical") * speed;
 
         if (Input.GetAxis("Horizontal") != 0) {
             xSpeed += (Input.GetAxis("Horizontal") * friction);
