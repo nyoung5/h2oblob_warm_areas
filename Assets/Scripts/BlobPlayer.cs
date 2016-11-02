@@ -26,9 +26,9 @@ public class BlobPlayer : MonoBehaviour {
     [Header("Settings")]
     public bool showDebug = false;                  // Show debug gizmos and lines
     public LayerMask castingMask;                  // Layer mask for casts. You'll want to ignore the player.
-    public float startDistanceFromBottom = 0.2f;   // Should probably be higher than skin width
+    public float startDistanceFromBottom = 0.5f;   // Should probably be higher than skin width
     public float sphereCastRadius = 0.25f;
-    public float sphereCastDistance = 0.75f;       // How far spherecast moves down from origin point
+    public float sphereCastDistance = 0.5f;       // How far spherecast moves down from origin point
 
     public float raycastLength = 0.75f;
     public Vector3 rayOriginOffset1 = new Vector3(-0.2f, 0f, 0.16f);
@@ -100,6 +100,11 @@ public class BlobPlayer : MonoBehaviour {
             Vector3 temp = Vector3.Cross(hit.normal, Vector3.down);
             //  Now use this vector and the hit normal, to find the other vector moving up and down the hit surface
             groundSlopeDir = Vector3.Cross(temp, hit.normal);
+            //charController.Move(groundSlopeDir * (groundSlopeAngle/180));
+            Vector3 movement = (groundSlopeDir / friction);
+            xSpeed += movement.x;
+            //ySpeed += groundSlopeDir.y;
+            zSpeed += movement.z;
         }
 
         // Now that's all fine and dandy, but on edges, corners, etc, we get angle values that we don't want.
