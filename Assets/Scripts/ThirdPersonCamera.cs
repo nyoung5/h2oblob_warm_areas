@@ -25,11 +25,6 @@ public class ThirdPersonCamera : MonoBehaviour {
     [SerializeField]
     private float minVert = -45f;
 
-    // My rotation value.  We have to keep our
-    // own, since localEulerAngles must be 0-360.
-    // Our variable is kept in range -45 to 45.
-    private float rotationX = 0;
-    private float rotationY = 0;
     private GameObject player;
 
     void Start() {
@@ -38,17 +33,26 @@ public class ThirdPersonCamera : MonoBehaviour {
     }
 
     // Update is called once per frame
+    //TODO: CAP DISTANCE CAMERA CAN BE FROM PLAYER
+    //TODO: CAP VERTICAL CAMERA MOVEMENT
     void Update() {
+        if (axes == RotationAxes.MouseY || axes == RotationAxes.MouseXandY) {
+            float xRot = Input.GetAxis("Mouse Y");
+            Vector3 movement = new Vector3(0, xRot, 0);
+            transform.Translate(movement);
+            transform.LookAt(player.transform);
+        }
+        if (axes == RotationAxes.MouseX || axes == RotationAxes.MouseXandY) {
+            float yRot = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityHor;
+            float currentXRot = transform.localEulerAngles.x;
+            transform.localEulerAngles = new Vector3(currentXRot, yRot, 0);
+        }
 
 
-        float xRot = Input.GetAxis("Mouse Y");
-        float yRot = Input.GetAxis("Mouse X");
 
-        Vector3 movement = new Vector3(yRot, xRot, 0);
-        //movement.Normalize();
-        transform.Translate(movement);
 
-        transform.LookAt(player.transform);
+
+        
     }
 
 }
