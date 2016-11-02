@@ -38,7 +38,7 @@ public class ThirdPersonCamera : MonoBehaviour {
     void Update() {
         if (axes == RotationAxes.MouseY || axes == RotationAxes.MouseXandY) {
             float xRot = Input.GetAxis("Mouse Y");
-            Vector3 movement = new Vector3(0, xRot, 0);
+            Vector3 movement = new Vector3(0, -xRot, 0);
             transform.Translate(movement);
             transform.LookAt(player.transform);
         }
