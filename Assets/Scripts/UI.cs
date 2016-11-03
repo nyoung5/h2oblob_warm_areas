@@ -20,7 +20,7 @@ public class UI : MonoBehaviour {
 
 		GameObject centerMessage = GameObject.Find ("CenterMessage");
 		Text textObject = centerMessage.GetComponent<Text>();
-		textObject.text = "There are 3 magic plants around this area. Find them all!";
+		textObject.text = "There are 3 magic plants around this area. Find them all to save GrandBlob!";
 		StartCoroutine (Wait (textObject));
 
 
@@ -80,7 +80,20 @@ public class UI : MonoBehaviour {
 		Text textObject = scoreCanvas.GetComponent<Text>();
 		int score = int.Parse (textObject.text);
 		score = score + 1; 
+		if (score == 3) {
+			YouWin ();
+		}
 		textObject.text = score.ToString();
+
+	}
+
+	public void YouWin(){
+
+		GameObject centerMessage = GameObject.Find ("CenterMessage");
+		Text textObject = centerMessage.GetComponent<Text>();
+		textObject.text = "You found all the seeds! You have saved GrandBlob!";
+		Cursor.lockState = CursorLockMode.None;
+		Time.timeScale = 0;
 
 	}
 
