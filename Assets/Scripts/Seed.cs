@@ -27,6 +27,7 @@ public class Seed : MonoBehaviour {
 		GameObject UICanvas = GameObject.Find ("UICanvas");
 		UI uiScript = UICanvas.GetComponent<UI>();
 		uiScript.SeedCollected ();
+		uiScript.updateScore ();
 
 	}
 		
