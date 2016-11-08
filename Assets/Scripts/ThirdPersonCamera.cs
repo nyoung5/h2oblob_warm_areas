@@ -40,6 +40,8 @@ public class ThirdPersonCamera : MonoBehaviour {
 			//Do trig here to find out the actual movement and stop breaking things
 			Vector3 movement = new Vector3(0, -xRot, 0);
 			//Debug.Log(xRot);
+
+			//no literals (i.e. 3) 
 			if ((transform.localPosition.z > 0 || xRot < 0) && (transform.localPosition.z < 3 || xRot > 0)) {
 				transform.Translate(movement);
 			}

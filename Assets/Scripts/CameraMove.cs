@@ -55,15 +55,5 @@ public class CameraMove : MonoBehaviour {
 		float newY = transform.localEulerAngles.y + Input.GetAxis ("Mouse X") * sensitivityHor;
 		return newY;
 	}
-
-	//    // Update is called once per frame
-	//    void Update () {
-	//    
-	//        //rotate based on arrow keys 
-	//        Vector3 vector = new Vector3(0.0f, (Input.GetAxis("Horizontal")), 0.0f);
-	//        this.transform.Rotate(vector * speed * Time.deltaTime); 
-	//
-	//
-	//
-	//    }
+		
 }
