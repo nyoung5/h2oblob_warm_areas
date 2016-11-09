@@ -7,11 +7,15 @@ public class UI : MonoBehaviour {
 	GameObject centerMessage;
 	Text centerText;
 
+	public float uiBaseScreenHeight = 1000f;
+
+
 	// Use this for initialization
 	void Start () {
 
 		centerMessage = GameObject.Find ("CenterMessage");
 		centerText = centerMessage.GetComponent<Text>();
+		centerText.fontSize = GetScaledFontSize(100);
 		
 	}
 	
@@ -19,6 +23,15 @@ public class UI : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	//set dynamic font size
+	//Adapted from: http://gamedev.stackexchange.com/questions/114452/unity-ui-text-font-size-changes-with-the-screen-resolution-problem
+	private int GetScaledFontSize (int baseFontSize) {
+		float uiScale = Screen.height / uiBaseScreenHeight;
+		int scaledFontSize = Mathf.RoundToInt(baseFontSize * uiScale);
+		return scaledFontSize;
+	}
+
 
 	public void PrintCenterMessage(string aMessage, int aTime){
 
@@ -73,18 +86,18 @@ public class UI : MonoBehaviour {
 
 	}
 
-	public void updateScore(){
-
-		GameObject scoreCanvas = GameObject.Find ("Score");
-		Text textObject = scoreCanvas.GetComponent<Text>();
-		int score = int.Parse (textObject.text);
-		score = score + 1; 
-		if (score == 3) {
-			YouWin ();
-		}
-		textObject.text = score.ToString();
-
-	}
+//	public void updateScore(){
+//
+//		GameObject scoreCanvas = GameObject.Find ("Score");
+//		Text textObject = scoreCanvas.GetComponent<Text>();
+//		int score = int.Parse (textObject.text);
+//		score = score + 1; 
+//		if (score == 3) {
+//			YouWin ();
+//		}
+//		textObject.text = score.ToString();
+//
+//	}
 
 	public void YouWin(){
 

@@ -5,19 +5,17 @@ public class BlobPlayer : MonoBehaviour {
 
 	//slope detection code from http://thehiddensignal.com/unity-angle-of-sloped-ground-under-player/
 
-	private float speed = 6.0f;
-	private float gravity = -9.8f;
-	private float jumpSpeed = 5f;
-	private float friction = .5f;
+	//TODO: properly implement these constants
+	private const float SPEED = 6.0f;
+	private const float GRAVITY = -2f;
+	private const float JUMPSPEED = 0.5f;
+	private const float FRICTION = .5f;
 
-	private float xSpeed = 0;
-	private float ySpeed = 0;
-	private float zSpeed = 0;
+	private float xSpeed;
+	private float ySpeed;
+	private float zSpeed;
 
-	//private float horStartTime;
-	//private float horPeakSpeed;
-	//private float vertStartTime;
-	//private float vertPeakSpeed;
+	private Vector3 momentumVector;
 
 	[Header("Results")]
 	public float groundSlopeAngle = 0f;            // Angle of the slope in degrees
@@ -38,65 +36,62 @@ public class BlobPlayer : MonoBehaviour {
 
 	void Start() {
 		charController = GetComponent<CharacterController>();
-		//horStartTime = Time.time;
-		//vertStartTime = Time.time;
+
+		xSpeed = 0;
+		ySpeed = 0;
+		zSpeed = 0;
+
+		momentumVector = Vector3.zero;
 	}
 
 	void Update() {
 		groundSlopeDir = Vector3.zero;
 
 		if (Input.GetAxis("Horizontal") != 0) {
-			xSpeed += (Input.GetAxis("Horizontal") * friction);
+			xSpeed = Input.GetAxis("Horizontal");
+			//Convert local horizontal movement into world movement and add to momentum
+			momentumVector += (this.gameObject.transform.right * FRICTION) * xSpeed * Time.deltaTime;
+		}
 
-			//horStartTime = Time.time;
-			//horPeakSpeed = xSpeed;
-		} //else {
-		//PEAK SPEED MUST BE SET CORRECTLY
-		//PEAK SPEED CAN BE ACHIEVED VIA SLOPES WITH NO USER INPUT (PUT OUTSIDE THIS STATEMENT)
-		//DO NOT USE LERP, USE SUBTRACTION
-		//ALWAYS SUBTRACT REGARDLESS OF WHETHER INPUT IS PRESSED OR NOT
-		//xSpeed = Mathf.Lerp(horPeakSpeed, 0, ((Time.time - horStartTime) * friction));
-		//}
 
 		if (Input.GetAxis("Vertical") != 0) {
-			zSpeed += (Input.GetAxis("Vertical") * friction);
-
+			zSpeed = Input.GetAxis("Vertical");
+			//Convert local vertical movement into world movement and add to momentum
+			momentumVector += (this.gameObject.transform.forward * FRICTION) * zSpeed * Time.deltaTime;
 		}
 
 		if (charController.isGrounded) {
-			if (Input.GetButtonDown ("Jump")) {
-				ySpeed = jumpSpeed;
+			if (Input.GetButtonDown("Jump")) {
+				ySpeed = JUMPSPEED;
+			} else {
+				//TODO: setting yspeed to 0 when grounded is ideal but it appears to make slope movement less smooth
+				//ySpeed = 0;
 			}
+			//if (ySpeed <= GRAVITY) {
+			//    Debug.Log("Player impacted ground at maximum speed");
+			//}
+			//Slope detection needed only if the player is on the ground
 			CheckGround(new Vector3(transform.position.x, transform.position.y - (charController.height / 2) + startDistanceFromBottom, transform.position.z));
 		} else {
-			ySpeed += gravity * Time.deltaTime;
-			//decrease gravity here for floatiness? increase deltatime?
+			ySpeed += GRAVITY * Time.deltaTime;
 		}
 
-		xSpeed = Mathf.Clamp(xSpeed, -speed, speed) + groundSlopeDir.x * friction; // MOVE ADDITION INSIDE CLAMP TO LIMIT DOWNHILL SPEED
-		zSpeed = Mathf.Clamp(zSpeed, -speed, speed) + groundSlopeDir.z * friction;
-		xSpeed = xSpeed / 1.05f;
-		zSpeed = zSpeed / 1.05f;
+		//TODO: get rid of magic numbers
+		//Clamp vector magnitude ("speed") while ignoring movement on y axis
+		momentumVector.y = 0;
+		momentumVector = Vector3.ClampMagnitude(momentumVector, .75f);
 
-		Vector3 movement = new Vector3(xSpeed, ySpeed, zSpeed);
+		//Add movement based on slope beneath blob
+		momentumVector.x += (groundSlopeDir.x * Time.deltaTime);
+		momentumVector.z += (groundSlopeDir.z * Time.deltaTime);
 
-		//Transform from local to world space
-		movement = transform.TransformDirection(movement);
-		movement *= Time.deltaTime;
-		//NOW ADD THE MOVEMENT FROM CHECKGROUND
-		//PROBLEM: THIS IS NOT INCLUDED IN THE MOVEMENT WHICH IS SCALED
-		movement.x += groundSlopeDir.x * friction;
-		movement.z += groundSlopeDir.z * friction;
-		//xSpeed = movement.x;
-		//zSpeed = movement.z;
+		//Shrink momentum over time
+		momentumVector /= 1.05f;
 
-		charController.Move(movement);
+		//Y speed should be unaffected by other calculations
+		momentumVector.y = ySpeed;
 
-		//idea: movement is a vector3 which holds the movement for the next step
-		//it is accurate because it is recalculated every step
-		//the previous step of movement should be taken into account and decay
-		//really xspeed and zspeed should be recalculated fully every step
-		//xspeed and zspeed are local and groundSlopeDir is global--they should be unified
+		charController.Move(momentumVector);
 	}
 
 	public void CheckGround(Vector3 origin) {
@@ -169,7 +164,4 @@ public class BlobPlayer : MonoBehaviour {
 			Gizmos.DrawLine(startPoint, endPoint);
 		}
 	}
-
-
-
 }
