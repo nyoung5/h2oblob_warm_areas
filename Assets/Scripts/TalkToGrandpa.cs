@@ -5,16 +5,17 @@ public class TalkToGrandpa : MonoBehaviour {
 
 	public float spawnTime = 0.5f;
 	const float MIN_DIST = 5.0f;
-	private bool isSpoken;
+	private bool cutscene1; 
 	GameObject player;
 
 
 	// Use this for initialization
 	void Start () {
 
+		//the cutscene has not been played upon initialization
+		cutscene1 = false; 
 		InvokeRepeating ("DetectPlayer", spawnTime, spawnTime);
 		player = GameObject.Find ("ActualBlob");
-		isSpoken = false;
 
 
 	}
@@ -24,20 +25,40 @@ public class TalkToGrandpa : MonoBehaviour {
 
 	}
 
-	void DetectPlayer(){
+	public void setCutscene(bool isTrue){
+		cutscene1 = isTrue;
+	}
 
-		Vector3 playerLocation = player.transform.position;
-		Vector3 grandpaLocation = this.gameObject.transform.position;
+	void OnTriggerEnter(Collider other){
 
-		//on first talk
-		if (Vector3.Distance(transform.position, playerLocation) <= MIN_DIST){
-			if(!(isSpoken)){
-				GameObject UICanvas = GameObject.Find ("UICanvas");
-				UI uiScript = UICanvas.GetComponent<UI>();
-				uiScript.hiGrandBlob ("Oh hello there. It's me, your GrandBlob.");
-				isSpoken = true;
-			}
+		print ("Trigger!!!");
+		
+		if (cutscene1) {
+			print ("Play the cutscene!!!");
+
+			//get secondary camera
+			Camera movieCam = GameObject.Find ("SecondaryCamera").GetComponent<Camera> ();
+
+			//set location
+			movieCam.transform.position = new Vector3 (86, 5, -34);
+
+			//set camera view
+			MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+			cameraScript.SetMovieCam ();
+
+		} else {
+
+			//GrandBlob dialogue
+			GameObject UICanvas = GameObject.Find ("UICanvas");
+			UI uiScript = UICanvas.GetComponent<UI>();
+			uiScript.Dialog ("Oh hello there. It's me, your GrandBlob.");
+
 		}
+	
+
+	}
+
+	void DetectPlayer(){
 
 		//if ice is too close to him
 		GameObject [] iceMagics = GameObject.FindGameObjectsWithTag ("ice");
@@ -47,7 +68,7 @@ public class TalkToGrandpa : MonoBehaviour {
 			if (Vector3.Distance (transform.position, icePlace) <= MIN_DIST) {
 				GameObject UICanvas = GameObject.Find ("UICanvas");
 				UI uiScript = UICanvas.GetComponent<UI>();
-				uiScript.hiGrandBlob ("It is too cold! Oh noooo!");
+				uiScript.Dialog ("It is too cold! Oh noooo!");
 			}
 		}
 

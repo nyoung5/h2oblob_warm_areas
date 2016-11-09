@@ -4,11 +4,15 @@ using System.Collections;
 
 public class UI : MonoBehaviour {
 
+	GameObject centerMessage;
+	Text centerText;
+
 	// Use this for initialization
 	void Start () {
 
-		Instructions ();
-	
+		centerMessage = GameObject.Find ("CenterMessage");
+		centerText = centerMessage.GetComponent<Text>();
+		
 	}
 	
 	// Update is called once per frame
@@ -16,37 +20,41 @@ public class UI : MonoBehaviour {
 	
 	}
 
-	public void Instructions(){
+	public void PrintCenterMessage(string aMessage, int aTime){
 
-		GameObject centerMessage = GameObject.Find ("CenterMessage");
-		Text textObject = centerMessage.GetComponent<Text>();
-		textObject.text = "There are 3 magic plants around this area. Find them all to save GrandBlob!";
-		StartCoroutine (Wait (textObject));
+		centerText.text = aMessage;
+	    StartCoroutine (Wait (aTime));
+
+	}
+
+	public IEnumerator specialWait(string [] messages, int [] times){
+	
+		for (var i = 0; i < messages.Length; i++) {
+			centerText.text = messages [i];
+			int waitTime = times [i];
+			yield return new WaitForSeconds (waitTime);
+		}
+		centerText.text = "";
 
 
 	}
 
 	public void YouDied(){
-		
-		GameObject centerMessage = GameObject.Find ("CenterMessage");
-		Text textObject = centerMessage.GetComponent<Text>();
-		textObject.text = "...you... Died...";
+
+		centerText.text = "...you... Died...";
 		Cursor.lockState = CursorLockMode.None;
 		Time.timeScale = 0;
 
-
 	}
 
-	public void hiGrandBlob(string message){
+	public void Dialog(string message){
 
-		GameObject centerMessage = GameObject.Find ("CenterMessage");
-		Text textObject = centerMessage.GetComponent<Text>();
-		textObject.text = "\n\n\n\n\""+message+"\"";
+		centerText.text = "\n\n\n\n\""+message+"\"";
 
 		if (message == "It is too cold! Oh noooo!") {
 			StartCoroutine(GrandBlobDie ());
 		} else {
-			StartCoroutine (Wait (textObject));
+			StartCoroutine (Wait (5));
 		}
 
 	}
@@ -59,18 +67,9 @@ public class UI : MonoBehaviour {
 
 	}
 
-	public void SeedCollected(){
-
-		GameObject centerMessage = GameObject.Find ("CenterMessage");
-		Text textObject = centerMessage.GetComponent<Text>();
-		textObject.text = "Congrats! You collected a magic seed!";
-		StartCoroutine (Wait (textObject));
-
-	}
-
-	public IEnumerator Wait(Text aText) {
-		yield return new WaitForSeconds(3);
-		aText.text = "";
+	public IEnumerator Wait(int aTime) {
+		yield return new WaitForSeconds(aTime);
+		centerText.text = "";
 
 	}
 
@@ -89,9 +88,7 @@ public class UI : MonoBehaviour {
 
 	public void YouWin(){
 
-		GameObject centerMessage = GameObject.Find ("CenterMessage");
-		Text textObject = centerMessage.GetComponent<Text>();
-		textObject.text = "You found all the seeds! You have saved GrandBlob!";
+		centerText.text = "You found all the seeds! You have saved GrandBlob!";
 		Cursor.lockState = CursorLockMode.None;
 		Time.timeScale = 0;
 
