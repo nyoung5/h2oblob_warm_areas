@@ -40,7 +40,6 @@ public class WaterPower : MonoBehaviour {
 			//if the water particle system is not already on, turn it on
 			if (!particleSystem.isPlaying) {
 				particleSystem.Play();
-				print ("ok");
 			}
 		} else{
 			timeLeft -= Time.deltaTime;

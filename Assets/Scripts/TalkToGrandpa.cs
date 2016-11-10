@@ -31,10 +31,7 @@ public class TalkToGrandpa : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 
-		print ("Trigger!!!");
-		
 		if (cutscene1) {
-			print ("Play the cutscene!!!");
 
 			//get secondary camera
 			Camera movieCam = GameObject.Find ("SecondaryCamera").GetComponent<Camera> ();
@@ -45,6 +42,7 @@ public class TalkToGrandpa : MonoBehaviour {
 			//set camera view
 			MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
 			cameraScript.SetMovieCam ();
+			cameraScript.grandpaCutscene ();
 
 		} else {
 

@@ -85,8 +85,10 @@
      <Compile Include="Assets\AssetStoreAssets\NatureStarterKit2\Standard Assets\Effects\ImageEffects\Scripts\Vortex.cs" />
      <Compile Include="Assets\Scripts\BlobPlayer.cs" />
      <Compile Include="Assets\Scripts\CameraMove.cs" />
+     <Compile Include="Assets\Scripts\DoorOpen.cs" />
      <Compile Include="Assets\Scripts\IceCircle.cs" />
      <Compile Include="Assets\Scripts\IcePower.cs" />
+     <Compile Include="Assets\Scripts\MillBlade.cs" />
      <Compile Include="Assets\Scripts\MovieCamera.cs" />
      <Compile Include="Assets\Scripts\PlantSunFlower.cs" />
      <Compile Include="Assets\Scripts\Seed.cs" />

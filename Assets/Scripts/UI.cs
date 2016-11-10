@@ -6,6 +6,7 @@ public class UI : MonoBehaviour {
 
 	GameObject centerMessage;
 	Text centerText;
+	private bool isSkip;
 
 	public float uiBaseScreenHeight = 1000f;
 
@@ -16,6 +17,7 @@ public class UI : MonoBehaviour {
 		centerMessage = GameObject.Find ("CenterMessage");
 		centerText = centerMessage.GetComponent<Text>();
 		centerText.fontSize = GetScaledFontSize(100);
+		isSkip = false;
 		
 	}
 	
@@ -32,6 +34,9 @@ public class UI : MonoBehaviour {
 		return scaledFontSize;
 	}
 
+	public void setSkip(bool isTrue){
+		isSkip = isTrue;
+	}
 
 	public void PrintCenterMessage(string aMessage, int aTime){
 
@@ -40,15 +45,20 @@ public class UI : MonoBehaviour {
 
 	}
 
-	public IEnumerator specialWait(string [] messages, int [] times){
+	public IEnumerator specialWait(string [] messages, int [] times, Color [] colors){
 	
 		for (var i = 0; i < messages.Length; i++) {
+			if (isSkip) {
+				break;
+			}
+			centerText.color = colors [i];
 			centerText.text = messages [i];
 			int waitTime = times [i];
 			yield return new WaitForSeconds (waitTime);
 		}
-		centerText.text = "";
 
+		centerText.text = "";
+		
 
 	}
 
