@@ -17,7 +17,7 @@ public class DoorOpen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		progress -= .001f;
+		progress -= .01f;
 		progress = Mathf.Clamp (progress, 0, 1);
 		angle = Mathf.Lerp (startPos, 90, progress);
 		this.gameObject.transform.localEulerAngles = new Vector3 (0, angle, 0);

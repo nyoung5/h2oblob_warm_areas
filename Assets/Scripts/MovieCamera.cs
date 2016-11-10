@@ -81,6 +81,11 @@ public class MovieCamera : MonoBehaviour {
 		//take off movie bars
 		setMovieScreen(false);
 
+		//show controls text
+		string controls = "Press \"c\" for controls :)";
+		GameObject UICanvas = GameObject.Find ("UICanvas");
+		Text uiText = UICanvas.GetComponent<Text>();
+		uiText.text = controls;
 
 	}
 
@@ -106,6 +111,11 @@ public class MovieCamera : MonoBehaviour {
 		charCam.enabled = false; 
 
 		setMovieScreen (true);
+
+		//hide controls text
+		GameObject UICanvas = GameObject.Find ("UICanvas");
+		Text uiText = UICanvas.GetComponent<Text>();
+		uiText.text = "";
 
 	}
 

@@ -23,6 +23,11 @@ public class UI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (Input.GetKeyDown ("c")) {
+			print ("Pressing c");
+			StartCoroutine (showControls (5));
+		}
 	
 	}
 
@@ -97,18 +102,20 @@ public class UI : MonoBehaviour {
 
 	}
 
-//	public void updateScore(){
-//
-//		GameObject scoreCanvas = GameObject.Find ("Score");
-//		Text textObject = scoreCanvas.GetComponent<Text>();
-//		int score = int.Parse (textObject.text);
-//		score = score + 1; 
-//		if (score == 3) {
-//			YouWin ();
-//		}
-//		textObject.text = score.ToString();
-//
-//	}
+	public IEnumerator showControls(int aTime) {
+
+		print ("show controls");
+
+		GameObject uiCanvas = GameObject.Find ("UICanvas");
+		Text uiText = uiCanvas.GetComponent<Text> ();
+		uiText.text = "~~~CONTROLS~~~ \n Use w, a, s, d to move.\n" +
+			"Use the mouse to change where you are looking. \n " +
+			"Press down on the mouse to use your ice abilities.\n " +
+			"Press the key 'q' to use your water powers.";
+		yield return new WaitForSeconds(aTime);
+		uiText.text = "";
+
+	}
 
 	public void YouWin(){
 
