@@ -91,7 +91,10 @@ public class BlobPlayer : MonoBehaviour {
 		//Y speed should be unaffected by other calculations
 		momentumVector.y = ySpeed;
 
-		charController.Move(momentumVector);
+		if (charController.enabled) {
+			charController.Move(momentumVector);
+		}
+
 	}
 
 	public void CheckGround(Vector3 origin) {

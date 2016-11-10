@@ -9,7 +9,7 @@ public class DoorOpen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		startPos = transform.eulerAngles.y;
+		startPos = transform.eulerAngles.y - 360;
 		angle = transform.eulerAngles.y;
 		progress = 0;
 	}
@@ -17,7 +17,7 @@ public class DoorOpen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		progress -= .01f;
+		progress -= .005f;
 		progress = Mathf.Clamp (progress, 0, 1);
 		angle = Mathf.Lerp (startPos, 90, progress);
 		this.gameObject.transform.localEulerAngles = new Vector3 (0, angle, 0);
