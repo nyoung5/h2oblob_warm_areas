@@ -6,7 +6,6 @@ public class TalkToGrandpa : MonoBehaviour {
 	public float spawnTime = 0.5f;
 	const float MIN_DIST = 5.0f;
 	private bool cutscene1; 
-	GameObject player;
 
 
 	// Use this for initialization
@@ -15,7 +14,6 @@ public class TalkToGrandpa : MonoBehaviour {
 		//the cutscene has not been played upon initialization
 		cutscene1 = false; 
 		InvokeRepeating ("DetectPlayer", spawnTime, spawnTime);
-		player = GameObject.Find ("ActualBlob");
 
 
 	}
@@ -49,7 +47,7 @@ public class TalkToGrandpa : MonoBehaviour {
 			//GrandBlob dialogue
 			GameObject UICanvas = GameObject.Find ("UICanvas");
 			UI uiScript = UICanvas.GetComponent<UI>();
-			uiScript.Dialog ("Oh hello there. It's me, your GrandBlob.");
+			uiScript.Dialog ("*shiver shiver*");
 
 		}
 	

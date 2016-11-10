@@ -58,7 +58,8 @@ public class UI : MonoBehaviour {
 		}
 
 		centerText.text = "";
-		
+		MovieCamera script = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+		script.SetCharCam ();
 
 	}
 
