@@ -1,7 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//@author Nathan Young
+/*
+
+WaterPower is the script that allows the player to use their water power
+
+Written by: Nathan Young
+(C) 2016
+
+*/
 public class WaterPower : MonoBehaviour {
 
 	public GameObject waterParticleSystem;

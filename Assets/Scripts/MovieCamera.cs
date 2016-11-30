@@ -2,8 +2,17 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/*
+
+MovieCamera is the script that deals with all the cutscenes in the game.
+
+Written by: Elena Sparacio
+(C) 2016
+
+*/
 public class MovieCamera : MonoBehaviour {
 
+	//set both cameras and other related variables
 	[SerializeField] Camera movieCam;
 	[SerializeField] Camera charCam;
 
@@ -28,6 +37,8 @@ public class MovieCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		//in the beginning of the game, move the camera for an animation
 		if (isBegin) {
 			movieCam.transform.position = Vector3.Lerp (transform.position, destination, speed * Time.deltaTime);
 		}
@@ -43,26 +54,24 @@ public class MovieCamera : MonoBehaviour {
 		}
 	}
 
+	//if the character hits the camera collider, switch to the character camera
 	void OnTriggerEnter(Collider other) {
-		
-
 		if (isBegin) {
 			//set character camera to allow the player to control the blob
 			SetCharCam ();
 			//move movie camera out of view
 			movieCam.transform.position = new Vector3 (movieCam.transform.position.x, movieCam.transform.position.y - 40, movieCam.transform.position.z);
 		} 
-
 	}
 
+	//setup for a cutscene
 	void CutsceneSetup(){
-
 		//since this is run on initilization, set the cutscene to be fresh
 		TalkToGrandpa script = GameObject.Find ("grandpa").GetComponent<TalkToGrandpa> ();
 		script.setCutscene (true);
-
 	}
 
+	//sets the camera back to being focused on the player
 	public void SetCharCam(){
 
 		isBegin = false;
@@ -89,6 +98,7 @@ public class MovieCamera : MonoBehaviour {
 
 	}
 
+	//setMovieScreen will enable or disable the movieCanvas 
 	public void setMovieScreen(bool isEnabled){
 		
 		//get movie canvas
@@ -97,6 +107,7 @@ public class MovieCamera : MonoBehaviour {
 
 	}
 
+	//sets the camera to the movie mode, where the player cannot interact
 	public void SetMovieCam(){
 
 		//lock cursor
@@ -119,8 +130,11 @@ public class MovieCamera : MonoBehaviour {
 
 	}
 
+	//startAnimation is the first cutscene of the game. It introduces the player
+	//to the world. 
 	public void startAnimation(){
 
+		//don't allow the player to move the cursor
 		Cursor.visible = false;
 
 		GameObject UICanvas = GameObject.Find ("UICanvas");
@@ -137,6 +151,7 @@ public class MovieCamera : MonoBehaviour {
 		messages [6] = "";
 		messages [7] = "Go find your Grandblob.";
 
+		//create times and colors arrays
 		int[] times = new int[8];
 		for (int i = 0; i < times.Length; i++) {
 			times [i] = 5;
@@ -147,12 +162,16 @@ public class MovieCamera : MonoBehaviour {
 			colors [i] = Color.white;
 		}
 
+		//print messages
 		StartCoroutine (uiScript.specialWait (messages, times, colors));
 
 	}
 
+	//grandpaCutscene is the second cutscene of the game. It is a conversation between Grandblob and
+	//the player blob. 
 	public void grandpaCutscene(){
 
+		//change background so text will show up
 		Image fadeImage = GameObject.Find ("FadeImage").GetComponent<Image>();
 		fadeImage.color = new Color32(255,255,225,50);
 
@@ -172,13 +191,16 @@ public class MovieCamera : MonoBehaviour {
 		messages [5] = "......................................";
 		messages [6] = "Grandblob! Nooo! You're frozen!!!";
 		messages [7] = "";
-		messages [8] = "To save Grandblob, find seeds around the world.";
+		messages [8] = "Go find someone to help!";
 
+
+		//create times array
 		int[] times = new int[9];
 		for (int i = 0; i < times.Length; i++) {
 			times [i] = 3;
 		}
 
+		//change color based on dialogue 
 		Color[] colors = new Color[9];
 
 		//set dialogue colors
@@ -199,6 +221,74 @@ public class MovieCamera : MonoBehaviour {
 
 		TalkToGrandpa script = GameObject.Find ("grandpa").GetComponent<TalkToGrandpa> ();
 		script.setCutscene (false);
+
+		//activate the next cutscene
+		Blobrarian scriptLibrary = GameObject.Find ("Blobrarian").GetComponent<Blobrarian> ();
+		scriptLibrary.setCutscene (true);
+
+	}
+
+	//this is the third cutscene of the game. It sets the scene and tells the player how to save
+	//their Grandblob
+	public void LibraryCutscene(){
+
+		//change background so text will show up
+		Image fadeImage = GameObject.Find ("FadeImage").GetComponent<Image>();
+		fadeImage.color = new Color32(255,255,225,50);
+
+		Cursor.visible = false;
+
+		GameObject UICanvas = GameObject.Find ("UICanvas");
+		UI uiScript = UICanvas.GetComponent<UI>();
+		uiScript.setSkip (false);
+
+		//Print library scene
+		string [] messages = new string[9];
+		messages [0] = "Hello there. You look worried.";
+		messages [1] = "I am! My Grandblob is FROZEN.";
+		messages [2] = "That's terrible. It must be Blobothermia, from the temperature.";
+		messages [3] = "Is there anything I can do to save him?";
+		messages [4] = "...Well, perhaps. There is a legend that certain plants around the world" +
+			" can be collected and planted to change the temperature.";
+		messages [5] = "If I collect those plants, can I save my Grandblob?";
+		messages [6] = "I would imagine so. Look, in that lake just near me... A plant.";
+		messages [7] = "";
+		messages [8] = "Collect all the plants around the world.";
+
+		//create times array
+		int[] times = new int[9];
+		times [0] = 3;
+		times [1] = 3;
+		times [2] = 4;
+		times [3] = 3;
+		times [4] = 5;
+		times [5] = 3;
+		times [6] = 4;
+		times [7] = 3;
+		times [8] = 3; 
+
+		//change color based on dialogue 
+		Color[] colors = new Color[9];
+
+		//set dialogue colors
+		Color libraryColor = new Color32(118,78,31,255);
+		Color blobColor = new Color32(0,244,225,255);
+
+		colors [0] = libraryColor;
+		colors [1] = blobColor;
+		colors [2] = libraryColor;
+		colors [3] = blobColor;
+		colors [4] = libraryColor;
+		colors [5] = blobColor;
+		colors [6] = libraryColor;
+		colors [7] = libraryColor;
+		colors [8] = Color.white;
+
+		StartCoroutine (uiScript.specialWait (messages, times, colors));
+
+		//disable the cutscene now that it has played
+		Blobrarian scriptLibrary = GameObject.Find ("Blobrarian").GetComponent<Blobrarian> ();
+		scriptLibrary.setCutscene (false);
 
 	}
 }

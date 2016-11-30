@@ -2,6 +2,15 @@
 using UnityEditor;
 using System.Collections;
 
+/*
+
+StartButton is the script that goes with the main menu. It allows
+you to the start or quit the game. 
+
+Written by: Elena Sparacio
+(C) 2016
+
+*/
 public class StartButton : MonoBehaviour {
 
 	// Use this for initialization
@@ -14,12 +23,14 @@ public class StartButton : MonoBehaviour {
 	
 	}
 
+	//Load the scene upon start
 	public void startGame(){
 
 		Application.LoadLevel("SnowMountains");
 
 	}
 
+	//Quit the game from the editor or from the application
 	public void quitGame(){
 
 		print ("Bye bye");

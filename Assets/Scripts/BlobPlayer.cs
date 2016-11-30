@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System;
 
+/*
+
+BlobPlayer is a script that deals with player movement
+
+Written by: Patrick Lathan
+(C) 2016
+
+*/
 public class BlobPlayer : MonoBehaviour {
 
 	//slope detection code from http://thehiddensignal.com/unity-angle-of-sloped-ground-under-player/

@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+
+TalkToGranpa is the script that is attached to Grandblob
+
+Written by: Elena Sparacio and Patrick Lathan
+(C) 2016
+
+*/
 public class TalkToGrandpa : MonoBehaviour {
 
 	public float spawnTime = 0.5f;
 	const float MIN_DIST = 5.0f;
 	private bool cutscene1; 
-
 
 	// Use this for initialization
 	void Start () {
@@ -14,8 +21,7 @@ public class TalkToGrandpa : MonoBehaviour {
 		//the cutscene has not been played upon initialization
 		cutscene1 = false; 
 		InvokeRepeating ("DetectPlayer", spawnTime, spawnTime);
-
-
+	
 	}
 
 	// Update is called once per frame
@@ -23,10 +29,12 @@ public class TalkToGrandpa : MonoBehaviour {
 
 	}
 
+	//setCutscene is called to the set whether or not the first cutscene has been played
 	public void setCutscene(bool isTrue){
 		cutscene1 = isTrue;
 	}
 
+	//Play certain animations
 	void OnTriggerEnter(Collider other){
 
 		if (cutscene1) {
@@ -54,6 +62,8 @@ public class TalkToGrandpa : MonoBehaviour {
 
 	}
 
+	//This checks if the player is close to grandblob, and if the player uses ice powers, 
+	//it kills grandblob :( 
 	void DetectPlayer(){
 
 		//if ice is too close to him

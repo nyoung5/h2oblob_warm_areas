@@ -2,6 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/*
+
+Seed is the script that is attached to a seed in the game.
+
+Written by: Elena Sparacio
+(C) 2016
+
+*/
 public class Seed : MonoBehaviour {
 
 	// Use this for initialization
@@ -14,6 +22,7 @@ public class Seed : MonoBehaviour {
 	
 	}
 
+	//if the player hits the seed, allow it to be collected
 	void OnTriggerEnter(Collider other) {
 
 		if (other.tag == "Player") {
@@ -22,12 +31,17 @@ public class Seed : MonoBehaviour {
 		}
 	}
 
+	//seedCollected is called when the player gets a new seed. 
 	void SeedCollected(){
 
+		//tell the player they got a seed
 		GameObject UICanvas = GameObject.Find ("UICanvas");
 		UI uiScript = UICanvas.GetComponent<UI>();
 		uiScript.PrintCenterMessage ("Congrats! You collected a seed!", 5);
-		//uiScript.updateScore ();
+
+		//add a seed to the seed counter in another script
+		PlantSunFlower script = GameObject.Find ("ActualBlob").GetComponent<PlantSunFlower> ();
+		script.GotASeed ();
 
 	}
 		

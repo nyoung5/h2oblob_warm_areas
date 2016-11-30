@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+
+Water is the script that is attached to a lake in the game. 
+
+Written by: Elena Sparacio
+(C) 2016
+
+*/
 public class Water : MonoBehaviour {
 
 	// Use this for initialization
@@ -13,6 +21,7 @@ public class Water : MonoBehaviour {
 	
 	}
 
+	//if the player hits the water, they die
 	void OnTriggerEnter(Collider other) {
 
 		if (other.tag == "Player") {
@@ -22,7 +31,7 @@ public class Water : MonoBehaviour {
 		}
 	}
 		
-
+	//print messages telling the player that they died 
 	public IEnumerator YouDrowned() {
 		
 		yield return new WaitForSeconds(1);

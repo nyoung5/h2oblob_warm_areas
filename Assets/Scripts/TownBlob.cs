@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+
+TownBlob is the script that is attached to each blob. 
+
+Written by: Elena Sparacio
+(C) 2016
+
+*/
 public class TownBlob : MonoBehaviour {
 
 	private string [] genericDialogue;
@@ -10,7 +18,7 @@ public class TownBlob : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//initialize generic dialogue
+		//initialize generic dialogue - each blob could say one of these random phrases
 		genericDialogue = new string[9];
 		genericDialogue [0] = "Hello!";
 		genericDialogue [1] = "It's such a wonderful day.";
@@ -29,6 +37,8 @@ public class TownBlob : MonoBehaviour {
 	
 	}
 
+	//When the player comes into a certain range, the town blob should then say
+	//one of the generic dialogue options to the player. 
 	void OnTriggerEnter(Collider other) {
 
 		System.Random rand = new System.Random ();
