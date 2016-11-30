@@ -1,30 +1,41 @@
 ﻿using UnityEngine;
 using System;
 
-/*
-
-BlobPlayer is a script that deals with player movement
-
-Written by: Patrick Lathan
-(C) 2016
-
-*/
 public class BlobPlayer : MonoBehaviour {
 
-	//slope detection code from http://thehiddensignal.com/unity-angle-of-sloped-ground-under-player/
+	//@author Nathan Young
+	public GameObject waterParticleSystem;
+	private ParticleSystem particleSystem;
 
-	//TODO: properly implement these constants
+	//Also see particle system setting: start lifetime
+	public const float TIME_ACTIVE = 1f;
+
+	//http://answers.unity3d.com/questions/225213/c-countdown-timer.html
+	private float timeLeft; //time left for power on
+	private bool canUseWater = true;
+	private bool waterIsActive;
+
+	//@author Patrick Lathan
 	private const float SPEED = 6.0f;
-	private const float GRAVITY = -2f;
 	private const float JUMPSPEED = 0.5f;
 	private const float FRICTION = .5f;
+	private const float BASEGRAVITY = -2f;
+	private const float VAPORGRAVITY = -1f;
+	private const float MOMENTUMDECAY = 1.05f;
 
-	private float xSpeed;
+	private float gravity;
+
 	private float ySpeed;
-	private float zSpeed;
+
+	private CharacterController charController;
+
+	public GameObject icePrefab;
+
+	private PowerState currentState;
 
 	private Vector3 momentumVector;
 
+	//http://thehiddensignal.com/unity-angle-of-sloped-ground-under-player/
 	[Header("Results")]
 	public float groundSlopeAngle = 0f;            // Angle of the slope in degrees
 	public Vector3 groundSlopeDir = Vector3.zero;  // The calculated slope as a vector
@@ -40,61 +51,80 @@ public class BlobPlayer : MonoBehaviour {
 	public Vector3 rayOriginOffset1 = new Vector3(-0.2f, 0f, 0.16f);
 	public Vector3 rayOriginOffset2 = new Vector3(0.2f, 0f, -0.16f);
 
-	private CharacterController charController;
-
 	void Start() {
+		//@author Nathan Young
+		waterParticleSystem = GameObject.Find("WaterParticleSystem");
+		particleSystem = waterParticleSystem.GetComponent<ParticleSystem>();
+
+		waterParticleSystem.SetActive(true);
+		particleSystem.Play();
+		particleSystem.Stop();
+
+		//@author Patrick Lathan
 		charController = GetComponent<CharacterController>();
 
-		xSpeed = 0;
+		//Set intial vertical speed to zero
 		ySpeed = 0;
-		zSpeed = 0;
 
+		//Set initial gravity to base value
+		gravity = BASEGRAVITY;
+
+		//Set intial momentum to zero
 		momentumVector = Vector3.zero;
+
+		//Set initial state
+		currentState = new IceState(this);
 	}
 
+	//@author Patrick Lathan
+	public void setState(PowerState newState) {
+		currentState = newState;
+	}
+
+	//@author Patrick Lathan
 	void Update() {
+		//groundSlopeDir should be recalculated every frame
 		groundSlopeDir = Vector3.zero;
 
 		if (Input.GetAxis("Horizontal") != 0) {
-			xSpeed = Input.GetAxis("Horizontal");
+			float xSpeed = Input.GetAxis("Horizontal");
 			//Convert local horizontal movement into world movement and add to momentum
 			momentumVector += (this.gameObject.transform.right * FRICTION) * xSpeed * Time.deltaTime;
 		}
 
 
 		if (Input.GetAxis("Vertical") != 0) {
-			zSpeed = Input.GetAxis("Vertical");
+			float zSpeed = Input.GetAxis("Vertical");
 			//Convert local vertical movement into world movement and add to momentum
 			momentumVector += (this.gameObject.transform.forward * FRICTION) * zSpeed * Time.deltaTime;
+		}
+
+		if (!(currentState is VaporState)) {
+			// Make sure gravity is always reset when exiting vapor state
+			gravity = BASEGRAVITY;
 		}
 
 		if (charController.isGrounded) {
 			if (Input.GetButtonDown("Jump")) {
 				ySpeed = JUMPSPEED;
-			} else {
-				//TODO: setting yspeed to 0 when grounded is ideal but it appears to make slope movement less smooth
-				//ySpeed = 0;
 			}
-			//if (ySpeed <= GRAVITY) {
-			//    Debug.Log("Player impacted ground at maximum speed");
-			//}
 			//Slope detection needed only if the player is on the ground
 			CheckGround(new Vector3(transform.position.x, transform.position.y - (charController.height / 2) + startDistanceFromBottom, transform.position.z));
-		} else {
-			ySpeed += GRAVITY * Time.deltaTime;
 		}
 
-		//TODO: get rid of magic numbers
+		ySpeed += gravity * Time.deltaTime;
+
 		//Clamp vector magnitude ("speed") while ignoring movement on y axis
-		momentumVector.y = 0;
-		momentumVector = Vector3.ClampMagnitude(momentumVector, .75f);
+		//Reimplement this in case of uncontrollable acceleration
+		//momentumVector.y = 0;
+		//momentumVector = Vector3.ClampMagnitude(momentumVector, .75f);
 
 		//Add movement based on slope beneath blob
 		momentumVector.x += (groundSlopeDir.x * Time.deltaTime);
 		momentumVector.z += (groundSlopeDir.z * Time.deltaTime);
 
 		//Shrink momentum over time
-		momentumVector /= 1.05f;
+		momentumVector /= MOMENTUMDECAY;
 
 		//Y speed should be unaffected by other calculations
 		momentumVector.y = ySpeed;
@@ -103,8 +133,11 @@ public class BlobPlayer : MonoBehaviour {
 			charController.Move(momentumVector);
 		}
 
+		//Additionally perform Update() for given power state
+		currentState.Update();
 	}
 
+	//entire CheckGround method from http://thehiddensignal.com/unity-angle-of-sloped-ground-under-player/
 	public void CheckGround(Vector3 origin) {
 		// Out hit point from our cast(s)
 		RaycastHit hit;
@@ -124,40 +157,80 @@ public class BlobPlayer : MonoBehaviour {
 			//  Now use this vector and the hit normal, to find the other vector moving up and down the hit surface
 			groundSlopeDir = Vector3.Cross(temp, hit.normal);
 		}
+	}
 
-		// Now that's all fine and dandy, but on edges, corners, etc, we get angle values that we don't want.
-		// To correct for this, let's do some raycasts. You could do more raycasts, and check for more
-		// edge cases here. There are lots of situations that could pop up, so test and see what gives you trouble.
-		RaycastHit slopeHit1;
-		RaycastHit slopeHit2;
+	//@author Elena Sparacio
+	//@author Patrick Lathan
+	class IceState : PowerState {
+		public IceState(BlobPlayer player) : base(player) {
+		}
 
-		// FIRST RAYCAST
-		if (Physics.Raycast(origin + rayOriginOffset1, Vector3.down, out slopeHit1, raycastLength)) {
-			// Debug line to first hit point
-			if (showDebug) {
-				Debug.DrawLine(origin + rayOriginOffset1, slopeHit1.point, Color.red);
-			}
-			// Get angle of slope on hit normal
-			float angleOne = Vector3.Angle(slopeHit1.normal, Vector3.up);
+		public override void Update() {
+			if (Input.GetButtonDown("IcePower")) {
+				GameObject[] iceCircles = GameObject.FindGameObjectsWithTag("ice");
 
-			// 2ND RAYCAST
-			if (Physics.Raycast(origin + rayOriginOffset2, Vector3.down, out slopeHit2, raycastLength)) {
-				// Debug line to second hit point
-				if (showDebug) {
-					Debug.DrawLine(origin + rayOriginOffset2, slopeHit2.point, Color.red);
+				//Destroy all previous ice circles when new one is spawned
+				foreach (GameObject oldIceCircle in iceCircles) {
+					Destroy(oldIceCircle);
 				}
-				// Get angle of slope of these two hit points.
-				float angleTwo = Vector3.Angle(slopeHit2.normal, Vector3.up);
-				// 3 collision points: Take the MEDIAN by sorting array and grabbing middle.
-				float[] tempArray = new float[] { groundSlopeAngle, angleOne, angleTwo };
-				Array.Sort(tempArray);
-				groundSlopeAngle = tempArray[1];
-			} else {
-				// 2 collision points (sphere and first raycast): AVERAGE the two
-				float average = (groundSlopeAngle + angleOne) / 2;
-				groundSlopeAngle = average;
+
+				GameObject iceCircle = Instantiate(player.icePrefab) as GameObject;
+				GameObject blob = GameObject.Find("ActualBlob");
+
+				Vector3 blobPosition = blob.transform.position + (blob.transform.forward * 2);
+
+				//Place ice in front of blob
+				iceCircle.transform.position = blobPosition;
 			}
 		}
 	}
 
+	//@author Patrick Lathan
+	class VaporState : PowerState {
+		public VaporState(BlobPlayer player) : base(player) {
+		}
+
+		public override void Update() {
+			if (Input.GetButton("VaporPower")) {
+				//Lessen gravity
+				player.gravity = VAPORGRAVITY;
+
+				//Allow jumping in midair
+				if (Input.GetButtonDown("Jump")) {
+					player.ySpeed = JUMPSPEED;
+				}
+			} else {
+				//Reset gravity to normal
+				player.gravity = BASEGRAVITY;
+			}
+
+
+		}
+	}
+
+	//@author Nathan Young
+	class WaterState : PowerState {
+		public WaterState(BlobPlayer player) : base(player) {
+		}
+
+		public override void Update() {
+			//if button pushed and blob in a state where it can use water
+			if (Input.GetButton("WaterPower")) {
+
+				player.timeLeft = TIME_ACTIVE;
+
+				//if the water particle system is not already on, turn it on
+				if (!player.particleSystem.isPlaying) {
+					player.particleSystem.Play();
+				}
+			} else {
+				player.timeLeft -= Time.deltaTime;
+				//if player hasn't used water in a while it stops being active
+				if (player.timeLeft < 0 && player.particleSystem.isPlaying) {
+					player.particleSystem.Stop(); // gameObject.GetComponent<ParticleSystem>().enableEmission = false; maybe use this, but its deprecated
+					// above source is from http://answers.unity3d.com/questions/37875/turning-the-particle-system-on-and-off.html
+				}
+			}
+		}
+	}
 }

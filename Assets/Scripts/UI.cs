@@ -66,13 +66,14 @@ public class UI : MonoBehaviour {
 	//between blobs. It changes color and display time based upon what is set in the array.
 
 	public IEnumerator specialWait(string [] messages, int [] times, Color [] colors){
-	
+
 		for (var i = 0; i < messages.Length; i++) {
 			if (isSkip) {
 				break;
 			}
 			centerText.color = colors [i];
 			centerText.text = messages [i];
+
 			int waitTime = times [i];
 			yield return new WaitForSeconds (waitTime);
 		}
@@ -140,12 +141,13 @@ public class UI : MonoBehaviour {
 		Text uiText = uiCanvas.GetComponent<Text> ();
 		uiText.text = "~~~CONTROLS~~~ \n Use w, a, s, d to move.\n" +
 			"Press space to jump.\n" + 
-			"Use the mouse to change where you are looking. \n " +
-			"Press down on the mouse to use your ice abilities.\n " +
+			"Use the mouse to change where you are looking. \n" +
+			"Press down on the mouse to use your ice abilities.\n" +
 			"Press the key 'q' to use your water powers.\n" +
-			"Press the key 'e' to use your vapor powers.\n";
+			"Press the key 'e' to use your vapor powers.\n" + 
+			"Press 'shift' to plant a seed.";
 		yield return new WaitForSeconds(aTime);
-		uiText.text = "";
+		uiText.text = "Press 'c' to show controls";
 
 	}
 
