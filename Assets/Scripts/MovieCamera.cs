@@ -90,11 +90,13 @@ public class MovieCamera : MonoBehaviour {
 		//take off movie bars
 		setMovieScreen(false);
 
-		//show controls text
+		//show controls text and temperature
 		string controls = "Press \"c\" for controls :)";
 		GameObject UICanvas = GameObject.Find ("UICanvas");
 		Text uiText = UICanvas.GetComponent<Text>();
 		uiText.text = controls;
+		Image thermometer = GameObject.Find ("Temperature").GetComponent<Image>();
+		thermometer.enabled = true;
 
 	}
 
@@ -123,10 +125,12 @@ public class MovieCamera : MonoBehaviour {
 
 		setMovieScreen (true);
 
-		//hide controls text
+		//hide controls text and temperature bar
 		GameObject UICanvas = GameObject.Find ("UICanvas");
 		Text uiText = UICanvas.GetComponent<Text>();
 		uiText.text = "";
+		Image thermometer = GameObject.Find ("Temperature").GetComponent<Image>();
+		thermometer.enabled = false;
 
 	}
 
