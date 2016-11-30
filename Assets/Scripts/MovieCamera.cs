@@ -97,6 +97,7 @@ public class MovieCamera : MonoBehaviour {
 		uiText.text = controls;
 		Image thermometer = GameObject.Find ("Temperature").GetComponent<Image>();
 		thermometer.enabled = true;
+		GameObject.Find ("Slider").transform.localScale = new Vector3(1, 1, 1);
 
 	}
 
@@ -131,6 +132,7 @@ public class MovieCamera : MonoBehaviour {
 		uiText.text = "";
 		Image thermometer = GameObject.Find ("Temperature").GetComponent<Image>();
 		thermometer.enabled = false;
+		GameObject.Find ("Slider").transform.localScale = new Vector3(0, 0, 0);
 
 	}
 
@@ -293,6 +295,11 @@ public class MovieCamera : MonoBehaviour {
 		//disable the cutscene now that it has played
 		Blobrarian scriptLibrary = GameObject.Find ("Blobrarian").GetComponent<Blobrarian> ();
 		scriptLibrary.setCutscene (false);
+
+	}
+
+	//this plays the final sequence of the game where Grandblob is saved
+	public void EndingSequence(){
 
 	}
 }

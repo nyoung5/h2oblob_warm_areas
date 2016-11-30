@@ -20,7 +20,7 @@ public class TalkToGrandpa : MonoBehaviour {
 
 		//the cutscene has not been played upon initialization
 		cutscene1 = false; 
-		InvokeRepeating ("DetectPlayer", spawnTime, spawnTime);
+		InvokeRepeating ("CheckObjectsAroundHim", spawnTime, spawnTime);
 	
 	}
 
@@ -39,32 +39,44 @@ public class TalkToGrandpa : MonoBehaviour {
 
 		if (cutscene1) {
 
-			//get secondary camera
-			Camera movieCam = GameObject.Find ("SecondaryCamera").GetComponent<Camera> ();
-
-			//set location
-			movieCam.transform.position = new Vector3 (86, 5, -34);
-
-			//set camera view
+			MovieSetup ();
 			MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
-			cameraScript.SetMovieCam ();
 			cameraScript.grandpaCutscene ();
 
-		} else {
+		} else if (other.gameObject.tag == "seed") {
+			//GrandBlob dialogue when he is feeling a bit warmer
+			GameObject UICanvas = GameObject.Find ("UICanvas");
+			UI uiScript = UICanvas.GetComponent<UI>();
+			uiScript.Dialog ("T-t-that's a b-b-bit... Warmer.");
 
+		} else {
 			//GrandBlob dialogue
 			GameObject UICanvas = GameObject.Find ("UICanvas");
 			UI uiScript = UICanvas.GetComponent<UI>();
 			uiScript.Dialog ("*shiver shiver*");
 
 		}
-	
+	}
+		
+
+	void MovieSetup(){
+
+		//get secondary camera
+		Camera movieCam = GameObject.Find ("SecondaryCamera").GetComponent<Camera> ();
+
+		//set location
+		movieCam.transform.position = new Vector3 (86, 5, -34);
+
+		//set camera view
+		MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+		cameraScript.SetMovieCam ();
 
 	}
 
 	//This checks if the player is close to grandblob, and if the player uses ice powers, 
-	//it kills grandblob :( 
-	void DetectPlayer(){
+	//it kills grandblob :( Also checks for if 10 seeds are around him, leading to him being 
+	//unfrozen 
+	void CheckObjectsAroundHim(){
 
 		//if ice is too close to him
 		GameObject [] iceMagics = GameObject.FindGameObjectsWithTag ("ice");
@@ -76,6 +88,34 @@ public class TalkToGrandpa : MonoBehaviour {
 				UI uiScript = UICanvas.GetComponent<UI>();
 				uiScript.Dialog ("It is too cold! Oh noooo!");
 			}
+		}
+
+		//check if the player has won the game
+		GameObject [] seeds = GameObject.FindGameObjectsWithTag ("seed");
+		int winCounter = 0;
+		for(var i = 0 ; i < seeds.Length ; i ++)
+		{
+			Vector3 seedPlace = seeds [i].transform.position;
+			if (Vector3.Distance (transform.position, seedPlace) <= MIN_DIST) {
+				winCounter++;
+				if (winCounter >= 10) {
+					DestroyAllSeeds ();
+					MovieSetup ();
+					MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+					cameraScript.EndingSequence ();
+				}
+			}
+		}
+
+	}
+
+	//this method destroys all the seeds in the game. It is called once the player has won!
+	void DestroyAllSeeds(){
+
+		//destroy all the seeds
+		GameObject[] seeds = GameObject.FindGameObjectsWithTag("seed");
+		foreach (GameObject seedObj in seeds) {
+			Destroy(seedObj);
 		}
 
 	}
