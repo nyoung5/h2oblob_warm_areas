@@ -301,5 +301,53 @@ public class MovieCamera : MonoBehaviour {
 	//this plays the final sequence of the game where Grandblob is saved
 	public void EndingSequence(){
 
+		//change background so text will show up
+		Image fadeImage = GameObject.Find ("FadeImage").GetComponent<Image>();
+		fadeImage.color = new Color32(255,255,225,50);
+
+		Cursor.visible = false;
+
+		GameObject UICanvas = GameObject.Find ("UICanvas");
+		UI uiScript = UICanvas.GetComponent<UI>();
+		uiScript.setSkip (false);
+
+		//Print grandblob scene
+		string [] messages = new string[8];
+		messages [0] = "Grandblob!!!";
+		messages [1] = "Blob! You saved me!";
+		messages [2] = "I'm so happy you are alright!";
+		messages [3] = "...";
+		messages [4] = "Do you still have the ground beef for those tacos?";
+		messages [5] = "As a matter a fact I think it is defrosted now...";
+		messages [6] = "";
+		messages [7] = "THE END";
+
+
+		//create times array
+		int[] times = new int[8];
+		for (int i = 0; i < times.Length-1; i++) {
+			times [i] = 3;
+		}
+		times [7] = 5;
+
+		//change color based on dialogue 
+		Color[] colors = new Color[8];
+
+		//set dialogue colors
+		Color grandblobColor = new Color32(1,12,255,255);
+		Color blobColor = new Color32(0,244,225,255);
+
+		colors [0] = blobColor;
+		colors [1] = grandblobColor;
+		colors [2] = blobColor;
+		colors [3] = grandblobColor;
+		colors [4] = grandblobColor;
+		colors [5] = blobColor;
+		colors [6] = blobColor;
+		colors [7] = Color.white;
+
+		StartCoroutine (uiScript.specialWait (messages, times, colors));
+		uiScript.IsEnd (true);
+
 	}
 }

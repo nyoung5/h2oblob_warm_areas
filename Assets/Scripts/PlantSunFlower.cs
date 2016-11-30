@@ -20,8 +20,7 @@ public class PlantSunFlower : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//for debugging - change to 0 later
-		numSeeds = 10;
+		numSeeds = 0;
 	
 	}
 	

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 
 /*
@@ -34,12 +33,8 @@ public class StartButton : MonoBehaviour {
 	public void quitGame(){
 
 		print ("Bye bye");
-
-		if (EditorApplication.isPlaying = true) {
-			EditorApplication.isPlaying = false;
-		} else {
-			Application.Quit ();
-		}
+		Application.Quit ();
+	
 
 
 	}

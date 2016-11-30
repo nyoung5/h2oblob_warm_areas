@@ -160,19 +160,4 @@ public class BlobPlayer : MonoBehaviour {
 		}
 	}
 
-	void OnDrawGizmosSelected() {
-		if (showDebug) {
-			// Visualize SphereCast with two spheres and a line
-			Vector3 startPoint = new Vector3(transform.position.x, transform.position.y - (charController.height / 2) + startDistanceFromBottom, transform.position.z);
-			Vector3 endPoint = new Vector3(transform.position.x, transform.position.y - (charController.height / 2) + startDistanceFromBottom - sphereCastDistance, transform.position.z);
-
-			Gizmos.color = Color.white;
-			Gizmos.DrawWireSphere(startPoint, sphereCastRadius);
-
-			Gizmos.color = Color.gray;
-			Gizmos.DrawWireSphere(endPoint, sphereCastRadius);
-
-			Gizmos.DrawLine(startPoint, endPoint);
-		}
-	}
 }

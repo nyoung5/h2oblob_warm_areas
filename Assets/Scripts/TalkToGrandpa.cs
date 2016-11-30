@@ -99,24 +99,26 @@ public class TalkToGrandpa : MonoBehaviour {
 			if (Vector3.Distance (transform.position, seedPlace) <= MIN_DIST) {
 				winCounter++;
 				if (winCounter >= 10) {
-					DestroyAllSeeds ();
-					MovieSetup ();
-					MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
-					cameraScript.EndingSequence ();
+					YouWin ();
 				}
 			}
 		}
 
 	}
 
-	//this method destroys all the seeds in the game. It is called once the player has won!
-	void DestroyAllSeeds(){
+	//This method is called when the player saves Grandblob!
+	void YouWin(){
 
 		//destroy all the seeds
 		GameObject[] seeds = GameObject.FindGameObjectsWithTag("seed");
 		foreach (GameObject seedObj in seeds) {
 			Destroy(seedObj);
 		}
+
+		//play the last cutscene 
+		MovieSetup ();
+		MovieCamera cameraScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+		cameraScript.EndingSequence ();
 
 	}
 }

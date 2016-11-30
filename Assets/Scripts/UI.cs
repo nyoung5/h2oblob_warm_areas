@@ -19,6 +19,7 @@ public class UI : MonoBehaviour {
 	Text centerText;
 	//bool that is true if the user chose to skip the cutscene
 	private bool isSkip;
+	private bool isEnd;
 
 
 
@@ -28,6 +29,7 @@ public class UI : MonoBehaviour {
 		centerMessage = GameObject.Find ("CenterMessage");
 		centerText = centerMessage.GetComponent<Text>();
 		isSkip = false;
+		isEnd = false;
 		
 	}
 	
@@ -46,6 +48,11 @@ public class UI : MonoBehaviour {
 	//this will stop the cutscene
 	public void setSkip(bool isTrue){
 		isSkip = isTrue;
+	}
+
+	//At the end of the game, this boolean is changed to true! :) 
+	public void IsEnd(bool isTrue){
+		isEnd = isTrue;
 	}
 
 	//Print center message will display a string on the screen for a certain
@@ -74,6 +81,13 @@ public class UI : MonoBehaviour {
 		centerText.text = "";
 		MovieCamera script = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
 		script.SetCharCam ();
+
+		//if the game is over, load the main menu
+		if (isEnd) {
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.Confined;
+			Application.LoadLevel("MainMenu");
+		}
 
 	}
 
