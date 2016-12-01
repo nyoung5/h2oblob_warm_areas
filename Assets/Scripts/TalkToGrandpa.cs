@@ -98,7 +98,7 @@ public class TalkToGrandpa : MonoBehaviour {
 			Vector3 seedPlace = seeds [i].transform.position;
 			if (Vector3.Distance (transform.position, seedPlace) <= MIN_DIST) {
 				winCounter++;
-				if (winCounter >= 10) {
+				if (winCounter >= 7) {
 					YouWin ();
 				}
 			}

@@ -1,8 +1,13 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TalkToGrandpa.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AssetStoreAssets/NatureStarterKit2/Editor/ImageEffects/CreaseShadingEditor.cs">
     <Files>
-      <File FileName="Assets/Scripts/TalkToGrandpa.cs" Line="66" Column="3" />
+      <File FileName="Assets/Scripts/Seed.cs" Line="62" Column="2" />
+      <File FileName="Assets/Scripts/MovieCamera.cs" Line="312" Column="42" />
+      <File FileName="Assets/Scripts/UI.cs" Line="152" Column="42" />
+      <File FileName="Assets/Scripts/BlobPlayer.cs" Line="169" Column="76" />
+      <File FileName="Assets/Scripts/Water.cs" Line="27" Column="24" />
+      <File FileName="Assets/AssetStoreAssets/NatureStarterKit2/Editor/ImageEffects/CreaseShadingEditor.cs" Line="8" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

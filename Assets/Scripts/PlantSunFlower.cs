@@ -15,12 +15,14 @@ public class PlantSunFlower : MonoBehaviour {
 	//variables including default number of seeds
 	public GameObject seedPrefab;
 	private int numSeeds;
+	private bool isFirst;
 
 
 	// Use this for initialization
 	void Start () {
 
 		numSeeds = 0;
+		isFirst = true;
 	
 	}
 	
@@ -41,7 +43,15 @@ public class PlantSunFlower : MonoBehaviour {
 
 	}
 
+	//GotASeed is called when the player picks up a seed. It increments the amount of seeds
+	//they currently have. If it is the first collected seed, it plays instructions
 	public void GotASeed(){
 		numSeeds++;
+		if (isFirst) {
+
+			MovieCamera movieScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+			movieScript.SeedInstructions ();
+			isFirst = false;
+		}
 	}
 }

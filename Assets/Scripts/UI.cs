@@ -145,9 +145,9 @@ public class UI : MonoBehaviour {
 		Text uiText = uiCanvas.GetComponent<Text> ();
 		uiText.text = "~~~CONTROLS~~~ \n Use w, a, s, d to move and space to jump.\n" + 
 			"Use the mouse to change where you are looking. \n" +
-			"Press down on the mouse to use your ice abilities when no seeds are planted.\n" +
-			"Press the key 'q' to use your water powers when 1 plant is planted.\n" +
-			"Press the key 'e' to use your vapor powers when 2 plants are planted.\n" + 
+			"Press down on the mouse to use your ice abilities (no plants)\n" +
+			"Press the key 'q' to use your water powers (1 plant)\n" +
+			"Hold the key 'e' and jump to use your vapor powers (2 plants)\n" + 
 			"Press 'shift' to plant a plant.";
 		yield return new WaitForSeconds(aTime);
 		uiText.text = "Press 'c' to show controls";

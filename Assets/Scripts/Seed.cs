@@ -12,13 +12,10 @@ Written by: Elena Sparacio
 */
 public class Seed : MonoBehaviour {
 
-	private bool isFirst;
 
 	// Use this for initialization
 	void Start () {
-
-		isFirst = true;
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -41,17 +38,8 @@ public class Seed : MonoBehaviour {
 		//tell the player they got a seed
 		GameObject UICanvas = GameObject.Find ("UICanvas");
 		UI uiScript = UICanvas.GetComponent<UI>();
-
-		if (isFirst) {
-
-			MovieCamera movieScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
-			movieScript.SeedInstructions ();
-			isFirst = false;
-
-		} else {
-			uiScript.PrintCenterMessage ("Congrats! You collected a seed!", 5);
-		}
-
+		uiScript.PrintCenterMessage ("Congrats! You collected a seed!", 5);
+	
 		//add a seed to the seed counter in another script
 		PlantSunFlower seedScript = GameObject.Find ("ActualBlob").GetComponent<PlantSunFlower> ();
 		seedScript.GotASeed ();

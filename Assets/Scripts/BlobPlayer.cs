@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class BlobPlayer : MonoBehaviour {
 
@@ -33,6 +34,8 @@ public class BlobPlayer : MonoBehaviour {
 
 	private PowerState currentState;
 
+	Dictionary<string, PowerState> states;
+
 	private Vector3 momentumVector;
 
 	//http://thehiddensignal.com/unity-angle-of-sloped-ground-under-player/
@@ -63,6 +66,14 @@ public class BlobPlayer : MonoBehaviour {
 		//@author Patrick Lathan
 		charController = GetComponent<CharacterController>();
 
+		//Create dictionary of states to be accessed by SetState()
+		states = new Dictionary<string, PowerState>()
+		{
+			{ "ice", new IceState(this) },
+			{ "water", new WaterState(this) },
+			{ "vapor", new VaporState(this) },
+		};
+
 		//Set intial vertical speed to zero
 		ySpeed = 0;
 
@@ -73,12 +84,12 @@ public class BlobPlayer : MonoBehaviour {
 		momentumVector = Vector3.zero;
 
 		//Set initial state
-		currentState = new IceState(this);
+		SetState("ice");
 	}
 
 	//@author Patrick Lathan
-	public void setState(PowerState newState) {
-		currentState = newState;
+	public void SetState(string powerString) {
+		currentState = states[powerString];
 	}
 
 	//@author Patrick Lathan
@@ -166,7 +177,7 @@ public class BlobPlayer : MonoBehaviour {
 		}
 
 		public override void Update() {
-			if (Input.GetButtonDown("IcePower")) {
+			if (Input.GetButtonDown("IcePower") && player.charController.isGrounded) {
 				GameObject[] iceCircles = GameObject.FindGameObjectsWithTag("ice");
 
 				//Destroy all previous ice circles when new one is spawned
