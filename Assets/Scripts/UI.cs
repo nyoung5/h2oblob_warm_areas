@@ -67,8 +67,11 @@ public class UI : MonoBehaviour {
 
 	public IEnumerator specialWait(string [] messages, int [] times, Color [] colors){
 
+		print (messages.Length);
+
 		for (var i = 0; i < messages.Length; i++) {
 			if (isSkip) {
+				i = messages.Length;
 				break;
 			}
 			centerText.color = colors [i];
@@ -77,6 +80,7 @@ public class UI : MonoBehaviour {
 			int waitTime = times [i];
 			yield return new WaitForSeconds (waitTime);
 		}
+
 
 		//switch back to normal view 
 		centerText.text = "";
@@ -139,13 +143,12 @@ public class UI : MonoBehaviour {
 
 		GameObject uiCanvas = GameObject.Find ("UICanvas");
 		Text uiText = uiCanvas.GetComponent<Text> ();
-		uiText.text = "~~~CONTROLS~~~ \n Use w, a, s, d to move.\n" +
-			"Press space to jump.\n" + 
+		uiText.text = "~~~CONTROLS~~~ \n Use w, a, s, d to move and space to jump.\n" + 
 			"Use the mouse to change where you are looking. \n" +
-			"Press down on the mouse to use your ice abilities.\n" +
-			"Press the key 'q' to use your water powers.\n" +
-			"Press the key 'e' to use your vapor powers.\n" + 
-			"Press 'shift' to plant a seed.";
+			"Press down on the mouse to use your ice abilities when no seeds are planted.\n" +
+			"Press the key 'q' to use your water powers when 1 plant is planted.\n" +
+			"Press the key 'e' to use your vapor powers when 2 plants are planted.\n" + 
+			"Press 'shift' to plant a plant.";
 		yield return new WaitForSeconds(aTime);
 		uiText.text = "Press 'c' to show controls";
 

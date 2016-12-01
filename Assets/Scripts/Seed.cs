@@ -43,36 +43,18 @@ public class Seed : MonoBehaviour {
 		UI uiScript = UICanvas.GetComponent<UI>();
 
 		if (isFirst) {
-			
-			uiScript.setSkip (false);
 
-			string[] messages = new string[4];
-			messages [0] = "You can plant seeds by pressing 'shift' to gain more powers.";
-			messages [1] = "One planted seed will give you water powers in an area.";
-			messages [2] = "Two planted seeds will give you vapor powers in an area.";
-			messages [3] = "Once you collect all the seeds, plant them around Grandblob to warm him.";
-
-			//create times and colors arrays
-			int[] times = new int[4];
-			for (int i = 0; i < times.Length; i++) {
-				times [i] = 3;
-			}
-			Color[] colors = new Color[4];
-			for (int i = 0; i < colors.Length; i++) {
-				colors [i] = Color.white;
-			}
-						
-			StartCoroutine (uiScript.specialWait (messages, times, colors));
+			MovieCamera movieScript = GameObject.Find ("SecondaryCamera").GetComponent<MovieCamera> ();
+			movieScript.SeedInstructions ();
 			isFirst = false;
+
 		} else {
-
 			uiScript.PrintCenterMessage ("Congrats! You collected a seed!", 5);
-
 		}
 
 		//add a seed to the seed counter in another script
-		PlantSunFlower script = GameObject.Find ("ActualBlob").GetComponent<PlantSunFlower> ();
-		script.GotASeed ();
+		PlantSunFlower seedScript = GameObject.Find ("ActualBlob").GetComponent<PlantSunFlower> ();
+		seedScript.GotASeed ();
 
 	}
 		

@@ -298,6 +298,33 @@ public class MovieCamera : MonoBehaviour {
 
 	}
 
+	//this tells the player more about planting seeds
+	public void SeedInstructions(){
+
+		GameObject UICanvas = GameObject.Find ("UICanvas");
+		UI uiScript = UICanvas.GetComponent<UI>();
+		uiScript.setSkip (false);
+
+		string[] messages = new string[4];
+		messages [0] = "You can plant seeds by pressing 'shift' to gain more powers.";
+		messages [1] = "One planted seed will give you water powers in an area.";
+		messages [2] = "Two planted seeds will give you vapor powers in an area.";
+		messages [3] = "Once you collect all of the seeds, plant them around Grandblob to warm him.";
+
+		//create times and colors arrays
+		int[] times = new int[4];
+		for (int i = 0; i < times.Length; i++) {
+			times [i] = 3;
+		}
+		Color[] colors = new Color[4];
+		for (int i = 0; i < colors.Length; i++) {
+			colors [i] = Color.white;
+		}
+
+		StartCoroutine (uiScript.specialWait (messages, times, colors));
+
+	}
+
 	//this plays the final sequence of the game where Grandblob is saved
 	public void EndingSequence(){
 
