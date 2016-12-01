@@ -92,6 +92,12 @@ public class BlobPlayer : MonoBehaviour {
 		currentState = states[powerString];
 	}
 
+	//@author Nathan Young
+	public PowerState GetState() {
+		return currentState;
+	}
+
+
 	//@author Patrick Lathan
 	void Update() {
 		//groundSlopeDir should be recalculated every frame
