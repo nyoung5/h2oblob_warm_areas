@@ -93,6 +93,7 @@
      <Compile Include="Assets\Scripts\PowerState.cs" />
      <Compile Include="Assets\Scripts\Seed.cs" />
      <Compile Include="Assets\Scripts\StartButton.cs" />
+     <Compile Include="Assets\Scripts\StateTest.cs" />
      <Compile Include="Assets\Scripts\TalkToGrandpa.cs" />
      <Compile Include="Assets\Scripts\Temperature.cs" />
      <Compile Include="Assets\Scripts\ThirdPersonCamera.cs" />

@@ -116,8 +116,10 @@ public class BlobPlayer : MonoBehaviour {
 		}
 
 		if (charController.isGrounded) {
-			if (Input.GetButtonDown("Jump")) {
+			if (Input.GetButtonDown ("Jump")) {
 				ySpeed = JUMPSPEED;
+			} else {
+				ySpeed = 0;
 			}
 			//Slope detection needed only if the player is on the ground
 			CheckGround(new Vector3(transform.position.x, transform.position.y - (charController.height / 2) + startDistanceFromBottom, transform.position.z));
