@@ -8,6 +8,8 @@ public class BlobPlayer : MonoBehaviour {
 	public GameObject waterParticleSystem;
 	private ParticleSystem particleSystem;
 
+	private Temperature temp;
+
 	//Also see particle system setting: start lifetime
 	public const float TIME_ACTIVE = 1f;
 
@@ -58,6 +60,7 @@ public class BlobPlayer : MonoBehaviour {
 		//@author Nathan Young
 		waterParticleSystem = GameObject.Find("WaterParticleSystem");
 		particleSystem = waterParticleSystem.GetComponent<ParticleSystem>();
+		temp = GameObject.Find("Temperature").GetComponent<Temperature>();
 
 		waterParticleSystem.SetActive(true);
 		particleSystem.Play();
@@ -178,6 +181,15 @@ public class BlobPlayer : MonoBehaviour {
 		}
 	}
 
+//@author Nathan Young
+	void OnTriggerEnter(Collider other){
+		currentState.OnTriggerEnter(other);
+	}
+	void OnTriggerExit(Collider other){
+			currentState.OnTriggerExit(other);
+	}
+
+
 	//@author Elena Sparacio
 	//@author Patrick Lathan
 	class IceState : PowerState {
@@ -202,6 +214,19 @@ public class BlobPlayer : MonoBehaviour {
 				iceCircle.transform.position = blobPosition;
 			}
 		}
+		public override void OnTriggerEnter(Collider other){
+			if (other.tag == "glowing") {
+				Debug.Log ("Ice inside the circle");
+
+			}
+		}
+		public override void OnTriggerExit(Collider other){
+			if (other.tag == "glowing") {
+				Debug.Log ("Ice Exit the circle");
+			}
+
+		}
+
 	}
 
 	//@author Patrick Lathan
@@ -223,6 +248,19 @@ public class BlobPlayer : MonoBehaviour {
 				player.gravity = BASEGRAVITY;
 			}
 
+
+		}
+		//@author Nathan Young
+		public override void OnTriggerEnter(Collider other){
+			if (other.tag == "glowing") {
+				Debug.Log ("vapor inside the circle");
+			}
+
+		}
+		public override void OnTriggerExit(Collider other){
+			if (other.tag == "glowing") {
+				Debug.Log ("vapor Exit the circle");
+			}
 
 		}
 	}
@@ -251,5 +289,19 @@ public class BlobPlayer : MonoBehaviour {
 				}
 			}
 		}
+		public override void OnTriggerEnter(Collider other){
+			if (other.tag == "glowing") {
+				Debug.Log ("water inside the circle");
+			}
+
+		}
+		public override void OnTriggerExit(Collider other){
+			if (other.tag == "glowing") {
+				Debug.Log ("water Exit the circle");
+			}
+
+		}
+
+
 	}
 }

@@ -12,4 +12,10 @@ public abstract class PowerState {
 
 	public abstract void Update();
 
+//@author Nahan Young
+//Note: the OnTriggerEnter is not the same as unity's, I mirrored it.
+	public abstract void OnTriggerEnter(Collider other);
+
+	public abstract void OnTriggerExit(Collider other);
+
 }
